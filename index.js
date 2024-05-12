@@ -3,7 +3,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
+// middelware
+app.use(cors());
+app.use(express.json());
 // username : mohammadhaolader1;
 // pass : saadaf404;
 
@@ -23,8 +25,8 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    const database = client.db("usersDb");
-    const usersCollection = database.collection("users");
+      const database = client.db("usersDb");
+      const usersCollection = database.collection("users");
 
     // get  all data 
     app.get("/users", async (req, res) => {
@@ -74,12 +76,10 @@ async function run() {
 }
 run().catch(console.dir);
 
-// middelware
-app.use(cors());
-app.use(express.json());
+
 
 app.get("/", (req, res) => {
-  res.send("Hello World!s");
+  res.send("crud Server");
 });
 
 // post
