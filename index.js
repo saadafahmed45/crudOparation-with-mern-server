@@ -25,10 +25,10 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-      const database = client.db("usersDb");
-      const usersCollection = database.collection("users");
+    const database = client.db("usersDb");
+    const usersCollection = database.collection("users");
 
-    // get  all data 
+    // get  all data
     app.get("/users", async (req, res) => {
       // res.send(users);
       const cusor = usersCollection.find();
@@ -36,14 +36,13 @@ async function run() {
       res.send(result);
     });
 
-    // get single  data  with id
-    app.get("/users/:userId", async (req, res) => {
-      const userId = req.params.userId;
+    // get single data
 
-        // Assuming usersCollection is your MongoDB collection
-        const cursor = usersCollection.find({ _id: userId }); // Assuming user IDs are stored as "_id" in the collection
-        const result = await cursor.toArray();
-    
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.findOne(query);
+      res.send(result);
     });
 
     // Delete the first document in  collection
@@ -56,7 +55,7 @@ async function run() {
       res.send(result);
     });
 
-    // post user data 
+    // post user data
     app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
@@ -75,8 +74,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 app.get("/", (req, res) => {
   res.send("crud Server");
